@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>🏁 Agile Hunter - Caza de Agiles</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚗</text></svg>">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        :root {
+            /* Modo Claro (día) */
+            --bg: #f0f2f5;
+            --bg-card: rgba(255,255,255,0.9);
+            --bg-card-hover: rgba(255,255,255,1);
+            --text: #1a1a2e;
+            --text-secondary: #555;
+            --border: rgba(0,0,0,0.1);
+            --shadow: 0 8px 32px rgba(0,0,0,0.08);
+            --accent: #00a859;
+            --accent-glow: rgba(0,168,89,0.3);
+            --gold: #f0b90b;
+            --gold-glow: rgba(240,185,11,0.4);
+            --danger: #e74c3c;
+            --input-bg: rgba(0,0,0,0.05);
+            --toast-bg: #1a1a2e;
+            --toast-text: white;
+            --modal-overlay: rgba(0,0,0,0.6);
+            --gradient: linear-gradient(135deg, #00a859, #2ecc71);
+            --btn-text: white;
+        }
+
+        /* Modo Oscuro (noche) */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0d1117;
+                --bg-card: rgba(22,27,34,0.95);
+                --bg-card-hover: rgba(30,37,47,1);
+                --text: #e6edf3;
+                --text-secondary: #8b949e;
+                --border: rgba(255,255,255,0.08);
+                --shadow: 0 8px 32px rgba(0,0,0,0.3);
+                --accent: #2ecc71;
+                --accent-glow: rgba(46,204,113,0.4);
+                --gold: #f0b90b;
+                --gold-glow: rgba(240,185,11,0.5);
+                --input-bg: rgba(255,255,255,0.08);
+                --toast-bg: #e6edf3;
+                --toast-text: #0d1117;
+                --modal-overlay: rgba(0,0,0,0.8);
+                --gradient: linear-gradient(135deg, #2ecc71, #00a859);
+                --btn-text: white;
+            }
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            transition: background 0.5s ease, color 0.5s ease;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Fondo decorativo */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 50%, var(--accent-glow) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 50%, var(--gold-glow) 0%, transparent 50%);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+            animation: bgFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes bgFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(2%, -1%) rotate(1deg); }
+            66% { transform: translate(-1%, 2%) rotate(-1deg); }
+        }
+
+        .container {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2rem 1.5rem;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: var(--shadow);
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        h1 {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 0.25rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+        }
+
+        .login-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            color: var(--btn-text);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .btn:active::after {
+            opacity: 1;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--accent-glow);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #f0b90b, #e5a600);
+            box-shadow: 0 4px 15px var(--gold-glow);
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--gold-glow);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn-outline:hover {
+            background: var(--input-bg);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+        }
+
+        .btn-small {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+            width: auto;
+        }
+
+        .scoreboard {
+            display: flex;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .player-card {
+            flex: 1;
+            background: var(--input-bg);
+            border-radius: 16px;
+            padding: 1rem;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .player-card.active {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .player-card .player-emoji {
+            font-size: 2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .player-card .player-name {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .player-card .player-score {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .player-card .player-bonus {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .section-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-secondary);
+            margin: 1.5rem 0 0.5rem;
+            text-align: center;
+        }
+
+        .recent-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border-radius: 12px;
+            background: var(--input-bg);
+            padding: 0.5rem;
+        }
+
+        .recent-list:empty::after {
+            content: '📭 No hay patentes aún... ¡A cazar!';
+            display: block;
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .recent-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            background: var(--bg);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .recent-item .patente-badge {
+            background: var(--gradient);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .recent-item .patente-info {
+            flex: 1;
+            font-size: 0.85rem;
+        }
+
+        .recent-item .patente-points {
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .recent-item .patente-points.bonus {
+            color: var(--gold);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--modal-overlay);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalPop {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal h3 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .modern-input {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1.1rem;
+            background: var(--input-bg);
+            color: var(--text);
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+            font-weight: 600;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .modern-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .modern-select {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: var(--input-bg);
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .modern-select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .btn-group .btn {
+            flex: 1;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--toast-bg);
+            color: var(--toast-text);
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            z-index: 200;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            pointer-events: none;
+            opacity: 0;
+            transition: all 0.3s ease;
+            text-align: center;
+            max-width: 90%;
+        }
+
+        .toast.show {
+            opacity: 1;
+            bottom: 30px;
+        }
+
+        /* Confeti Canvas */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 300;
+        }
+
+        /* Efecto de brillo en puntaje */
+        @keyframes scoreGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+
+        .score-animating {
+            animation: scoreGlow 0.5s ease-in-out;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        /* Responsive */
+        @media (max-width: 400px) {
+            .container {
+                padding: 1.5rem 1rem;
+                border-radius: 20px;
+            }
+            h1 { font-size: 1.6rem; }
+            .player-card .player-score { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="app-container">
+        <!-- Pantalla de Login (primera visita) -->
+        <div id="login-screen">
+            <h1>🏁 Agile Hunter</h1>
+            <h2>El juego de cazar Chevrolet Agile</h2>
+            <p style="text-align:center;margin-bottom:1rem;color:var(--text-secondary)">
+                ¿Quién está jugando ahora?
+            </p>
+            <div class="login-buttons">
+                <button class="btn btn-primary" onclick="seleccionarJugador('Yesica')">
+                    <span>👩</span> Soy Yesica
+                </button>
+                <button class="btn btn-outline" onclick="seleccionarJugador('Oscar')">
+                    <span>👨</span> Soy Oscar
+                </button>
+            </div>
+            <p style="text-align:center;font-size:0.8rem;color:var(--text-secondary);margin-top:1rem;">
+                📱 Esto se guardará en tu teléfono
+            </p>
+        </div>
+
+        <!-- Pantalla de Juego -->
+        <div id="game-screen" style="display:none;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <h1 style="font-size:1.5rem;">🏁 Agile Hunter</h1>
+                <button class="btn btn-outline btn-small" onclick="cambiarJugador()" title="Cambiar jugador">
+                    🔄
+                </button>
+            </div>
+            <h2 id="semana-label">Cargando...</h2>
+
+            <!-- Scoreboard -->
+            <div class="scoreboard">
+                <div class="player-card" id="card-yesica">
+                    <div class="player-emoji">👩</div>
+                    <div class="player-name">Yesica</div>
+                    <div class="player-score" id="score-yesica">0</div>
+                    <div class="player-bonus">puntos</div>
+                </div>
+                <div class="player-card" id="card-oscar">
+                    <div class="player-emoji">👨</div>
+                    <div class="player-name">Oscar</div>
+                    <div class="player-score" id="score-oscar">0</div>
+                    <div class="player-bonus">puntos</div>
+                </div>
+            </div>
+
+            <!-- Botones de acción -->
+            <button class="btn btn-primary" onclick="abrirModalPatente()">
+                <span>➕</span> Anotar patente
+            </button>
+            <button class="btn btn-outline" style="margin-top:0.5rem;" onclick="descargarExcel()">
+                <span>📥</span> Descargar Excel (CSV)
+            </button>
+
+            <!-- Últimas patentes -->
+            <div class="section-title">📋 Últimas capturas</div>
+            <div class="recent-list" id="recent-list"></div>
+        </div>
+    </div>
+
+    <!-- Modal para ingresar patente -->
+    <div class="modal-overlay" id="modal-patente" style="display:none;">
+        <div class="modal">
+            <h3>🔍 Nueva captura</h3>
+            <p style="text-align:center;color:var(--text-secondary);margin-bottom:1rem;font-size:0.9rem;">
+                Jugador: <strong id="modal-jugador"></strong>
+            </p>
+            
+            <div class="input-group">
+                <label>Patente del vehículo</label>
+                <input type="text" class="modern-input" id="input-patente" 
+                       placeholder="AB123CD" maxlength="7"
+                       autocomplete="off" spellcheck="false">
+            </div>
+            
+            <button class="btn btn-primary" id="btn-buscar-datacar" onclick="buscarEnDatacar()">
+                <span>🌐</span> Buscar en Datacar
+            </button>
+            
+            <div id="confirmacion-section" style="display:none;">
+                <hr style="border-color:var(--border);margin:1.5rem 0;">
+                <p style="text-align:center;margin-bottom:1rem;font-weight:600;">
+                    ¿Es un Chevrolet Agile?
+                </p>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="esAgile(true)">✅ Sí</button>
+                    <button class="btn btn-outline" onclick="esAgile(false)">❌ No</button>
+                </div>
+                <div id="provincia-section" style="display:none;margin-top:1rem;">
+                    <div class="input-group">
+                        <label>Provincia de radicación</label>
+                        <select class="modern-select" id="select-provincia"></select>
+                    </div>
+                    <p style="text-align:center;font-size:0.8rem;color:var(--text-secondary);margin-bottom:0.5rem;">
+                        📍 Distancia a Catamarca: <strong id="distancia-preview">-</strong>
+                    </p>
+                    <p style="text-align:center;font-size:0.8rem;color:var(--text-secondary);margin-bottom:0.5rem;">
+                        ⭐ Bonificación: <strong id="bonus-preview">-</strong>
+                    </p>
+                    <button class="btn btn-gold" onclick="guardarPatente()">
+                        <span>🚀</span> ¡Anotar Agile!
+                    </button>
+                </div>
+            </div>
+            
+            <button class="btn btn-outline" style="margin-top:0.75rem;" onclick="cerrarModal()">
+                ❌ Cancelar
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Canvas para confeti -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <script>
+        // ==================== CONFIGURACIÓN ====================
+        // Coordenadas de capitales provinciales (latitud, longitud)
+        const PROVINCIAS = {
+            "Buenos Aires": [-34.6037, -58.3816],
+            "Catamarca": [-28.4696, -65.7852],
+            "Chaco": [-27.4511, -58.9867],
+            "Chubut": [-43.3000, -65.1000],
+            "Córdoba": [-31.4201, -64.1888],
+            "Corrientes": [-27.4806, -58.8346],
+            "Entre Ríos": [-31.7333, -60.5333],
+            "Formosa": [-26.1831, -58.1758],
+            "Jujuy": [-24.1858, -65.2995],
+            "La Pampa": [-36.6167, -64.2833],
+            "La Rioja": [-29.4131, -66.8558],
+            "Mendoza": [-32.8895, -68.8458],
+            "Misiones": [-27.3671, -55.8960],
+            "Neuquén": [-38.9516, -68.0591],
+            "Río Negro": [-40.8000, -63.0000],
+            "Salta": [-24.7859, -65.4117],
+            "San Juan": [-31.5375, -68.5364],
+            "San Luis": [-33.2994, -66.3362],
+            "Santa Cruz": [-51.6226, -69.2181],
+            "Santa Fe": [-31.6333, -60.7000],
+            "Santiago del Estero": [-27.7951, -64.2615],
+            "Tierra del Fuego": [-54.8000, -68.3000],
+            "Tucumán": [-26.8241, -65.2226]
+        };
+
+        // ==================== ESTADO ====================
+        let jugadorActual = localStorage.getItem('agile_hunter_player') || null;
+        let patenteTemporal = '';
+
+        // ==================== INICIALIZACIÓN ====================
+        window.addEventListener('DOMContentLoaded', () => {
+            llenarSelectProvincias();
+            cargarDatosJuego();
+            verificarParametrosURL();
+            setupProvinciaChange();
+
+            if (jugadorActual) {
+                mostrarPantallaJuego();
+            } else {
+                mostrarPantallaLogin();
+            }
+        });
+
+        // ==================== NAVEGACIÓN ====================
+        function mostrarPantallaLogin() {
+            document.getElementById('login-screen').style.display = 'block';
+            document.getElementById('game-screen').style.display = 'none';
+        }
+
+        function mostrarPantallaJuego() {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'block';
+            document.getElementById('semana-label').textContent = obtenerRangoSemana();
+            actualizarUI();
+        }
+
+        function seleccionarJugador(nombre) {
+            jugadorActual = nombre;
+            localStorage.setItem('agile_hunter_player', nombre);
+            mostrarToast(`👋 ¡Hola ${nombre}! A cazar Agiles 🚗`);
+            mostrarPantallaJuego();
+        }
+
+        function cambiarJugador() {
+            if (confirm('¿Querés cambiar de jugador? Se borrará la selección actual.')) {
+                localStorage.removeItem('agile_hunter_player');
+                jugadorActual = null;
+                mostrarPantallaLogin();
+            }
+        }
+
+        // ==================== MODAL DE PATENTE ====================
+        function abrirModalPatente() {
+            patenteTemporal = '';
+            document.getElementById('input-patente').value = '';
+            document.getElementById('confirmacion-section').style.display = 'none';
+            document.getElementById('provincia-section').style.display = 'none';
+            document.getElementById('modal-jugador').textContent = jugadorActual;
+            document.getElementById('modal-patente').style.display = 'flex';
+            document.getElementById('btn-buscar-datacar').style.display = 'block';
+            setTimeout(() => document.getElementById('input-patente').focus(), 100);
+        }
+
+        function cerrarModal() {
+            document.getElementById('modal-patente').style.display = 'none';
+        }
+
+        function buscarEnDatacar() {
+            const input = document.getElementById('input-patente');
+            let patente = input.value.trim().toUpperCase();
+            
+            if (!patente || patente.length < 6) {
+                mostrarToast('⚠️ Ingresá una patente válida (6 o 7 caracteres)');
+                input.focus();
+                return;
+            }
+
+            patenteTemporal = patente;
+            document.getElementById('btn-buscar-datacar').style.display = 'none';
+            document.getElementById('confirmacion-section').style.display = 'block';
+            
+            // Abrir Datacar en nueva pestaña con la patente pre-cargada
+            window.open('https://www.datacar.com.ar/?plate=' + patente, '_blank');
+            
+            mostrarToast('🌐 Revisá Datacar y volvé para confirmar');
+        }
+
+        function esAgile(confirmado) {
+            if (!confirmado) {
+                mostrarToast('❌ No es Agile, no suma puntos');
+                cerrarModal();
+                return;
+            }
+            document.getElementById('provincia-section').style.display = 'block';
+            actualizarPreviewDistancia();
+        }
+
+        function setupProvinciaChange() {
+            document.getElementById('select-provincia').addEventListener('change', actualizarPreviewDistancia);
+        }
+
+        function actualizarPreviewDistancia() {
+            const provincia = document.getElementById('select-provincia').value;
+            if (!provincia) return;
+            
+            const distancia = calcularDistancia(provincia);
+            const bonificacion = calcularBonificacion(distancia);
+            
+            document.getElementById('distancia-preview').textContent = Math.round(distancia) + ' km';
+            document.getElementById('bonus-preview').textContent = bonificacion > 0 ? '+' + bonificacion : 'Sin bonus';
+        }
+
+        function guardarPatente() {
+            const provincia = document.getElementById('select-provincia').value;
+            
+            if (!provincia) {
+                mostrarToast('⚠️ Seleccioná la provincia de radicación');
+                return;
+            }
+
+            if (!patenteTemporal) {
+                mostrarToast('⚠️ Primero buscá la patente en Datacar');
+                return;
+            }
+
+            // Verificar duplicados
+            const patentes = obtenerPatentes();
+            if (patentes.some(p => p.patente === patenteTemporal)) {
+                mostrarToast('⚠️ Esta patente ya fue registrada');
+                return;
+            }
+
+            const distancia = calcularDistancia(provincia);
+            const bonificacion = calcularBonificacion(distancia);
+            const puntos = 1 + bonificacion;
+            const semana = obtenerSemanaISO();
+
+            const nuevaPatente = {
+                patente: patenteTemporal,
+                jugador: jugadorActual,
+                provincia: provincia,
+                distancia_km: Math.round(distancia),
+                bonificacion: bonificacion,
+                puntos: puntos,
+                semana: semana,
+                timestamp: new Date().toISOString()
+            };
+
+            patentes.push(nuevaPatente);
+            guardarPatentes(patentes);
+
+            // Efectos visuales
+            lanzarConfetti(bonificacion > 0 ? 'gold' : 'green');
+            const mensaje = bonificacion > 0 
+                ? `🎉 ¡AGILE CAZADO! +${puntos} pts (${bonificacion} bonus) 🌟`
+                : `✅ ¡Agile! +${puntos} punto`;
+            mostrarToast(mensaje);
+
+            actualizarUI();
+            cerrarModal();
+        }
+
+        // ==================== DATOS (LocalStorage) ====================
+        function obtenerPatentes() {
+            try {
+                return JSON.parse(localStorage.getItem('agile_hunter_patentes') || '[]');
+            } catch {
+                return [];
+            }
+        }
+
+        function guardarPatentes(patentes) {
+            localStorage.setItem('agile_hunter_patentes', JSON.stringify(patentes));
+        }
+
+        function cargarDatosJuego() {
+            actualizarUI();
+            // Mostrar ganador de semana anterior
+            setTimeout(mostrarGanadorSemanaAnterior, 1000);
+        }
+
+        function actualizarUI() {
+            const patentes = obtenerPatentes();
+            const semanaActual = obtenerSemanaISO();
+            
+            // Calcular puntajes semanales
+            let puntosYesica = 0, puntosOscar = 0;
+            patentes.filter(p => p.semana === semanaActual).forEach(p => {
+                if (p.jugador === 'Yesica') puntosYesica += p.puntos;
+                else if (p.jugador === 'Oscar') puntosOscar += p.puntos;
+            });
+
+            document.getElementById('score-yesica').textContent = puntosYesica;
+            document.getElementById('score-oscar').textContent = puntosOscar;
+
+            // Resaltar jugador activo
+            document.getElementById('card-yesica').classList.toggle('active', jugadorActual === 'Yesica');
+            document.getElementById('card-oscar').classList.toggle('active', jugadorActual === 'Oscar');
+
+            // Mostrar últimas patentes
+            const recientes = patentes.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 10);
+            const lista = document.getElementById('recent-list');
+            lista.innerHTML = recientes.map(p => `
+                <div class="recent-item">
+                    <span class="patente-badge">${p.patente}</span>
+                    <div class="patente-info">
+                        <div>${p.jugador} · ${p.provincia}</div>
+                        <div style="font-size:0.75rem;color:var(--text-secondary)">${formatearFecha(p.timestamp)}</div>
+                    </div>
+                    <span class="patente-points ${p.bonificacion > 0 ? 'bonus' : ''}">+${p.puntos}</span>
+                </div>
+            `).join('');
+        }
+
+        function mostrarGanadorSemanaAnterior() {
+            const patentes = obtenerPatentes();
+            const semanaActual = obtenerSemanaISO();
+            const semanaPasada = semanaActual - 1;
+            
+            const patentesSemanaPasada = patentes.filter(p => p.semana === semanaPasada);
+            if (patentesSemanaPasada.length === 0) return;
+
+            let puntosYesica = 0, puntosOscar = 0;
+            patentesSemanaPasada.forEach(p => {
+                if (p.jugador === 'Yesica') puntosYesica += p.puntos;
+                else puntosOscar += p.puntos;
+            });
+
+            let mensaje = '';
+            if (puntosYesica > puntosOscar) {
+                mensaje = `🏆 Yesica ganó la semana pasada (${puntosYesica} vs ${puntosOscar})`;
+            } else if (puntosOscar > puntosYesica) {
+                mensaje = `🏆 Oscar ganó la semana pasada (${puntosOscar} vs ${puntosYesica})`;
+            } else if (patentesSemanaPasada.length > 0) {
+                mensaje = `🤝 ¡Empate la semana pasada! (${puntosYesica} pts cada uno)`;
+            }
+            
+            if (mensaje) mostrarToast(mensaje);
+        }
+
+        // ==================== CÁLCULOS ====================
+        function calcularDistancia(provincia) {
+            const [lat1, lon1] = PROVINCIAS['Catamarca'];
+            const [lat2, lon2] = PROVINCIAS[provincia] || PROVINCIAS['Catamarca'];
+            
+            const R = 6371; // Radio terrestre en km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) *
+                      Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        function calcularBonificacion(distancia) {
+            if (distancia < 300) return 0;
+            if (distancia < 800) return 1;
+            if (distancia < 1500) return 2;
+            return 3;
+        }
+
+        function obtenerSemanaISO() {
+            const ahora = new Date();
+            const inicioAnio = new Date(ahora.getFullYear(), 0, 1);
+            const dias = Math.floor((ahora - inicioAnio) / (24 * 60 * 60 * 1000));
+            return Math.ceil((dias + inicioAnio.getDay() + 1) / 7);
+        }
+
+        function obtenerRangoSemana() {
+            const ahora = new Date();
+            const dia = ahora.getDay();
+            const lunes = new Date(ahora);
+            lunes.setDate(ahora.getDate() - dia + (dia === 0 ? -6 : 1));
+            const domingo = new Date(lunes);
+            domingo.setDate(lunes.getDate() + 6);
+            
+            const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+            return `${lunes.getDate()} ${meses[lunes.getMonth()]} → ${domingo.getDate()} ${meses[domingo.getMonth()]}`;
+        }
+
+        function formatearFecha(isoString) {
+            const fecha = new Date(isoString);
+            return `${fecha.getDate()}/${fecha.getMonth()+1} ${fecha.getHours()}:${String(fecha.getMinutes()).padStart(2,'0')}`;
+        }
+
+        // ==================== UTILIDADES ====================
+        function llenarSelectProvincias() {
+            const select = document.getElementById('select-provincia');
+            select.innerHTML = '<option value="">-- Seleccionar --</option>';
+            Object.keys(PROVINCIAS).sort().forEach(prov => {
+                select.innerHTML += `<option value="${prov}">${prov}</option>`;
+            });
+        }
+
+        function verificarParametrosURL() {
+            const params = new URLSearchParams(window.location.search);
+            if (!params.get('plate')) return;
+
+            // Si el usuario viene de Datacar con el userscript
+            const patente = params.get('plate');
+            const esAgile = params.get('agile') === '1';
+            const provincia = params.get('province');
+
+            if (esAgile && provincia && jugadorActual) {
+                // Precargar datos
+                document.getElementById('input-patente').value = patente;
+                patenteTemporal = patente;
+                document.getElementById('select-provincia').value = provincia;
+                actualizarPreviewDistancia();
+                
+                // Preguntar si quiere guardar
+                setTimeout(() => {
+                    if (confirm(`¿Guardar patente ${patente} como Agile de ${provincia}?`)) {
+                        guardarPatente();
+                    }
+                }, 500);
+            }
+
+            // Limpiar URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        function descargarExcel() {
+            const patentes = obtenerPatentes();
+            if (patentes.length === 0) {
+                mostrarToast('📭 No hay patentes para descargar');
+                return;
+            }
+
+            let csv = 'Patente,Jugador,Provincia,Distancia (km),Bonificación,Puntos,Semana,Fecha\n';
+            patentes.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)).forEach(p => {
+                csv += `${p.patente},${p.jugador},${p.provincia},${p.distancia_km},${p.bonificacion},${p.puntos},${p.semana},"${p.timestamp}"\n`;
+            });
+
+            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `agile_hunter_${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            mostrarToast('📥 ¡Excel descargado!');
+        }
+
+        // ==================== TOAST & NOTIFICACIONES ====================
+        let toastTimeout;
+        function mostrarToast(mensaje) {
+            const toast = document.getElementById('toast');
+            toast.textContent = mensaje;
+            toast.classList.add('show');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // ==================== CONFETI ====================
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let particulas = [];
+        let animacionId = null;
+
+        function lanzarConfetti(tipo) {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particulas = [];
+            
+            const colores = tipo === 'gold' 
+                ? ['#f0b90b','#ffd700','#e5a600','#f39c12','#ffed4a']
+                : ['#00a859','#2ecc71','#27ae60','#1abc9c','#58d68d'];
+            
+            for (let i = 0; i < 100; i++) {
+                particulas.push({
+                    x: Math.random() * canvas.width,
+                    y: -20 - Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 6,
+                    vy: Math.random() * 3 + 2,
+                    color: colores[Math.floor(Math.random() * colores.length)],
+                    size: Math.random() * 8 + 3,
+                    rotacion: Math.random() * 360,
+                    rotVel: (Math.random() - 0.5) * 15,
+                    forma: Math.random() > 0.5 ? 'rect' : 'circle'
+                });
+            }
+
+            if (animacionId) cancelAnimationFrame(animacionId);
+            animarConfetti();
+        }
+
+        function animarConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            let todasCayeron = true;
+            particulas.forEach(p => {
+                p.y += p.vy;
+                p.x += p.vx;
+                p.vy += 0.05; // gravedad
+                p.rotacion += p.rotVel;
+                
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rotacion * Math.PI / 180);
+                ctx.fillStyle = p.color;
+                
+                if (p.forma === 'circle') {
+                    ctx.beginPath();
+                    ctx.arc(0, 0, p.size/2, 0, Math.PI*2);
+                    ctx.fill();
+                } else {
+                    ctx.fillRect(-p.size/2, -p.size/4, p.size, p.size/2);
+                }
+                
+                ctx.restore();
+                
+                if (p.y < canvas.height + 50) {
+                    todasCayeron = false;
+                }
+            });
+
+            if (!todasCayeron) {
+                animacionId = requestAnimationFrame(animarConfetti);
+            }
+        }
+
+        // ==================== REGISTRAR SERVICE WORKER ====================
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js').catch(() => {});
+            });
+        }
+    </script>
+</body>
+</html>
