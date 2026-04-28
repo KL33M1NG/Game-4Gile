@@ -1,0 +1,16 @@
+{
+    "name": "Agile Hunter",
+    "short_name": "AgileHunter",
+    "description": "Juego de caza de Chevrolet Agile para Yesica y Oscar",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#1a1a2e",
+    "theme_color": "#1a1a2e",
+    "icons": [
+        {
+            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2300a859'/><text y='.75em' x='50' text-anchor='middle' font-size='60'>🚗</text></svg>",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ]
+}
