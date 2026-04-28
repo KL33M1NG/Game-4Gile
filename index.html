@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#1a1a2e">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>🏁 Agile Hunter - Caza de Agiles</title>
+    <title>🏁 Agile Hunter - Oscar & Yesica</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚗</text></svg>">
     <link rel="manifest" href="manifest.json">
     <style>
@@ -32,7 +32,6 @@
             --btn-text: white;
         }
 
-        /* Modo Oscuro (noche) */
         @media (prefers-color-scheme: dark) {
             :root {
                 --bg: #0d1117;
@@ -72,7 +71,6 @@
             overflow-x: hidden;
         }
 
-        /* Fondo decorativo */
         body::before {
             content: '';
             position: fixed;
@@ -102,26 +100,57 @@
             border-radius: 24px;
             padding: 2rem 1.5rem;
             width: 100%;
-            max-width: 480px;
+            max-width: 500px;
             box-shadow: var(--shadow);
             position: relative;
             z-index: 1;
             transition: all 0.3s ease;
         }
 
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
         h1 {
-            font-size: 2rem;
-            text-align: center;
-            margin-bottom: 0.25rem;
+            font-size: 1.8rem;
             background: var(--gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            margin: 0;
+        }
+
+        .online-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #e74c3c;
+            animation: pulse 2s infinite;
+        }
+
+        .online-dot.connected {
+            background: #2ecc71;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
         }
 
         h2 {
             text-align: center;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: var(--text-secondary);
             margin-bottom: 1.5rem;
             font-weight: 400;
@@ -161,9 +190,7 @@
             transition: opacity 0.3s;
         }
 
-        .btn:active::after {
-            opacity: 1;
-        }
+        .btn:active::after { opacity: 1; }
 
         .btn-primary {
             background: var(--gradient);
@@ -175,9 +202,7 @@
             box-shadow: 0 8px 25px var(--accent-glow);
         }
 
-        .btn-primary:active {
-            transform: scale(0.97);
-        }
+        .btn-primary:active { transform: scale(0.97); }
 
         .btn-gold {
             background: linear-gradient(135deg, #f0b90b, #e5a600);
@@ -195,16 +220,10 @@
             color: var(--text);
         }
 
-        .btn-outline:hover {
-            background: var(--input-bg);
-        }
-
-        .btn-danger {
-            background: var(--danger);
-        }
+        .btn-outline:hover { background: var(--input-bg); }
 
         .btn-small {
-            padding: 0.6rem 1.2rem;
+            padding: 0.6rem 1rem;
             font-size: 0.9rem;
             width: auto;
         }
@@ -250,6 +269,17 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            transition: all 0.3s ease;
+        }
+
+        .player-card .player-score.changed {
+            animation: scorePop 0.5s ease;
+        }
+
+        @keyframes scorePop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
         }
 
         .player-card .player-bonus {
@@ -267,7 +297,7 @@
         }
 
         .recent-list {
-            max-height: 200px;
+            max-height: 300px;
             overflow-y: auto;
             border-radius: 12px;
             background: var(--input-bg);
@@ -307,6 +337,8 @@
             font-weight: 700;
             font-size: 0.85rem;
             letter-spacing: 1px;
+            min-width: 70px;
+            text-align: center;
         }
 
         .recent-item .patente-info {
@@ -314,8 +346,14 @@
             font-size: 0.85rem;
         }
 
+        .recent-item .patente-info small {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+        }
+
         .recent-item .patente-points {
             font-weight: 700;
+            font-size: 1.2rem;
             color: var(--accent);
         }
 
@@ -420,14 +458,37 @@
             margin-top: 1rem;
         }
 
-        .btn-group .btn {
-            flex: 1;
+        .btn-group .btn { flex: 1; }
+
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 1.5rem 0;
+        }
+
+        .preview-info {
+            background: var(--input-bg);
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .preview-info .preview-distance {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .preview-info .preview-bonus {
+            font-size: 1.2rem;
+            color: var(--gold);
         }
 
         /* Toast */
         .toast {
             position: fixed;
-            bottom: 20px;
+            bottom: -100px;
             left: 50%;
             transform: translateX(-50%);
             background: var(--toast-bg);
@@ -437,15 +498,13 @@
             font-weight: 600;
             z-index: 200;
             box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-            pointer-events: none;
-            opacity: 0;
-            transition: all 0.3s ease;
+            transition: bottom 0.3s ease;
             text-align: center;
             max-width: 90%;
+            white-space: nowrap;
         }
 
         .toast.show {
-            opacity: 1;
             bottom: 30px;
         }
 
@@ -460,35 +519,20 @@
             z-index: 300;
         }
 
-        /* Efecto de brillo en puntaje */
-        @keyframes scoreGlow {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.3); }
-        }
-
-        .score-animating {
-            animation: scoreGlow 0.5s ease-in-out;
-        }
-
         /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb {
             background: var(--border);
             border-radius: 3px;
         }
 
-        /* Responsive */
         @media (max-width: 400px) {
             .container {
                 padding: 1.5rem 1rem;
                 border-radius: 20px;
             }
-            h1 { font-size: 1.6rem; }
+            h1 { font-size: 1.5rem; }
             .player-card .player-score { font-size: 2rem; }
         }
     </style>
@@ -496,18 +540,18 @@
 <body>
 
     <div class="container" id="app-container">
-        <!-- Pantalla de Login (primera visita) -->
+        <!-- Pantalla de Login -->
         <div id="login-screen">
             <h1>🏁 Agile Hunter</h1>
             <h2>El juego de cazar Chevrolet Agile</h2>
-            <p style="text-align:center;margin-bottom:1rem;color:var(--text-secondary)">
+            <p style="text-align:center;margin-bottom:1.5rem;color:var(--text-secondary)">
                 ¿Quién está jugando ahora?
             </p>
             <div class="login-buttons">
                 <button class="btn btn-primary" onclick="seleccionarJugador('Yesica')">
                     <span>👩</span> Soy Yesica
                 </button>
-                <button class="btn btn-outline" onclick="seleccionarJugador('Oscar')">
+                <button class="btn btn-primary" onclick="seleccionarJugador('Oscar')">
                     <span>👨</span> Soy Oscar
                 </button>
             </div>
@@ -518,15 +562,16 @@
 
         <!-- Pantalla de Juego -->
         <div id="game-screen" style="display:none;">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-                <h1 style="font-size:1.5rem;">🏁 Agile Hunter</h1>
-                <button class="btn btn-outline btn-small" onclick="cambiarJugador()" title="Cambiar jugador">
-                    🔄
-                </button>
+            <div class="header">
+                <h1>🏁 Agile Hunter</h1>
+                <div class="online-badge">
+                    <span class="online-dot" id="connection-dot"></span>
+                    <span id="connection-text">Conectando...</span>
+                    <button class="btn btn-outline btn-small" onclick="cambiarJugador()" title="Cambiar jugador">🔄</button>
+                </div>
             </div>
             <h2 id="semana-label">Cargando...</h2>
 
-            <!-- Scoreboard -->
             <div class="scoreboard">
                 <div class="player-card" id="card-yesica">
                     <div class="player-emoji">👩</div>
@@ -542,15 +587,13 @@
                 </div>
             </div>
 
-            <!-- Botones de acción -->
             <button class="btn btn-primary" onclick="abrirModalPatente()">
                 <span>➕</span> Anotar patente
             </button>
             <button class="btn btn-outline" style="margin-top:0.5rem;" onclick="descargarExcel()">
-                <span>📥</span> Descargar Excel (CSV)
+                <span>📥</span> Descargar Excel
             </button>
 
-            <!-- Últimas patentes -->
             <div class="section-title">📋 Últimas capturas</div>
             <div class="recent-list" id="recent-list"></div>
         </div>
@@ -576,7 +619,7 @@
             </button>
             
             <div id="confirmacion-section" style="display:none;">
-                <hr style="border-color:var(--border);margin:1.5rem 0;">
+                <hr class="divider">
                 <p style="text-align:center;margin-bottom:1rem;font-weight:600;">
                     ¿Es un Chevrolet Agile?
                 </p>
@@ -584,17 +627,17 @@
                     <button class="btn btn-primary" onclick="esAgile(true)">✅ Sí</button>
                     <button class="btn btn-outline" onclick="esAgile(false)">❌ No</button>
                 </div>
-                <div id="provincia-section" style="display:none;margin-top:1rem;">
-                    <div class="input-group">
+                <div id="provincia-section" style="display:none;">
+                    <div class="input-group" style="margin-top:1rem;">
                         <label>Provincia de radicación</label>
                         <select class="modern-select" id="select-provincia"></select>
                     </div>
-                    <p style="text-align:center;font-size:0.8rem;color:var(--text-secondary);margin-bottom:0.5rem;">
-                        📍 Distancia a Catamarca: <strong id="distancia-preview">-</strong>
-                    </p>
-                    <p style="text-align:center;font-size:0.8rem;color:var(--text-secondary);margin-bottom:0.5rem;">
-                        ⭐ Bonificación: <strong id="bonus-preview">-</strong>
-                    </p>
+                    <div class="preview-info">
+                        <p style="color:var(--text-secondary);margin-bottom:0.5rem;">📍 Distancia a Catamarca</p>
+                        <div class="preview-distance" id="distancia-preview">- km</div>
+                        <p style="color:var(--text-secondary);margin-top:0.5rem;">⭐ Bonificación</p>
+                        <div class="preview-bonus" id="bonus-preview">-</div>
+                    </div>
                     <button class="btn btn-gold" onclick="guardarPatente()">
                         <span>🚀</span> ¡Anotar Agile!
                     </button>
@@ -615,50 +658,156 @@
 
     <script>
         // ==================== CONFIGURACIÓN ====================
-        // Coordenadas de capitales provinciales (latitud, longitud)
+        // ⚠️ PEGÁ ACÁ TU URL DE GOOGLE APPS SCRIPT
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzwk73U_QC5R5aZvxZbR9nF75dxLnYZLuvWj2zF95tmUPLzb9RGtFk1_tbTtq68f4f_yw/exec';
+        
+        // Intervalo de actualización (milisegundos)
+        const REFRESH_INTERVAL = 5000; // 5 segundos
+
+        // Coordenadas de capitales provinciales
         const PROVINCIAS = {
-            "Buenos Aires": [-34.6037, -58.3816],
-            "Catamarca": [-28.4696, -65.7852],
-            "Chaco": [-27.4511, -58.9867],
-            "Chubut": [-43.3000, -65.1000],
-            "Córdoba": [-31.4201, -64.1888],
-            "Corrientes": [-27.4806, -58.8346],
-            "Entre Ríos": [-31.7333, -60.5333],
-            "Formosa": [-26.1831, -58.1758],
-            "Jujuy": [-24.1858, -65.2995],
-            "La Pampa": [-36.6167, -64.2833],
-            "La Rioja": [-29.4131, -66.8558],
-            "Mendoza": [-32.8895, -68.8458],
-            "Misiones": [-27.3671, -55.8960],
-            "Neuquén": [-38.9516, -68.0591],
-            "Río Negro": [-40.8000, -63.0000],
-            "Salta": [-24.7859, -65.4117],
-            "San Juan": [-31.5375, -68.5364],
-            "San Luis": [-33.2994, -66.3362],
-            "Santa Cruz": [-51.6226, -69.2181],
-            "Santa Fe": [-31.6333, -60.7000],
-            "Santiago del Estero": [-27.7951, -64.2615],
-            "Tierra del Fuego": [-54.8000, -68.3000],
-            "Tucumán": [-26.8241, -65.2226]
+            'Buenos Aires': [-34.6037, -58.3816],
+            'Catamarca': [-28.4696, -65.7852],
+            'Chaco': [-27.4511, -58.9867],
+            'Chubut': [-43.3000, -65.1000],
+            'Córdoba': [-31.4201, -64.1888],
+            'Corrientes': [-27.4806, -58.8346],
+            'Entre Ríos': [-31.7333, -60.5333],
+            'Formosa': [-26.1831, -58.1758],
+            'Jujuy': [-24.1858, -65.2995],
+            'La Pampa': [-36.6167, -64.2833],
+            'La Rioja': [-29.4131, -66.8558],
+            'Mendoza': [-32.8895, -68.8458],
+            'Misiones': [-27.3671, -55.8960],
+            'Neuquén': [-38.9516, -68.0591],
+            'Río Negro': [-40.8000, -63.0000],
+            'Salta': [-24.7859, -65.4117],
+            'San Juan': [-31.5375, -68.5364],
+            'San Luis': [-33.2994, -66.3362],
+            'Santa Cruz': [-51.6226, -69.2181],
+            'Santa Fe': [-31.6333, -60.7000],
+            'Santiago del Estero': [-27.7951, -64.2615],
+            'Tierra del Fuego': [-54.8000, -68.3000],
+            'Tucumán': [-26.8241, -65.2226]
         };
 
         // ==================== ESTADO ====================
         let jugadorActual = localStorage.getItem('agile_hunter_player') || null;
         let patenteTemporal = '';
+        let ultimoPuntajeYesica = 0;
+        let ultimoPuntajeOscar = 0;
+        let refreshIntervalId = null;
 
         // ==================== INICIALIZACIÓN ====================
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
             llenarSelectProvincias();
-            cargarDatosJuego();
-            verificarParametrosURL();
             setupProvinciaChange();
-
+            
+            // Solicitar permiso de notificaciones
+            solicitarPermisoNotificaciones();
+            
             if (jugadorActual) {
                 mostrarPantallaJuego();
+                await inicializarDatos();
+                iniciarActualizacionPeriodica();
             } else {
                 mostrarPantallaLogin();
             }
+            
+            verificarParametrosURL();
         });
+
+        async function inicializarDatos() {
+            await actualizarUI();
+            const puntajes = await obtenerPuntajesActuales();
+            ultimoPuntajeYesica = puntajes.yesica;
+            ultimoPuntajeOscar = puntajes.oscar;
+            setTimeout(mostrarGanadorSemanaAnterior, 1500);
+        }
+
+        function iniciarActualizacionPeriodica() {
+            if (refreshIntervalId) clearInterval(refreshIntervalId);
+            refreshIntervalId = setInterval(verificarCambios, REFRESH_INTERVAL);
+        }
+
+        async function verificarCambios() {
+            try {
+                const puntajes = await obtenerPuntajesActuales();
+                
+                // Verificar si Yesica anotó (cuando el jugador actual es Oscar)
+                if (jugadorActual === 'Oscar' && puntajes.yesica > ultimoPuntajeYesica) {
+                    const diferencia = puntajes.yesica - ultimoPuntajeYesica;
+                    notificarPuntos('Yesica', diferencia);
+                    mostrarToast(`📲 ¡Yesica sumó +${diferencia} puntos!`);
+                }
+                
+                // Verificar si Oscar anotó (cuando el jugador actual es Yesica)
+                if (jugadorActual === 'Yesica' && puntajes.oscar > ultimoPuntajeOscar) {
+                    const diferencia = puntajes.oscar - ultimoPuntajeOscar;
+                    notificarPuntos('Oscar', diferencia);
+                    mostrarToast(`📲 ¡Oscar sumó +${diferencia} puntos!`);
+                }
+                
+                ultimoPuntajeYesica = puntajes.yesica;
+                ultimoPuntajeOscar = puntajes.oscar;
+                
+                document.getElementById('connection-dot').classList.add('connected');
+                document.getElementById('connection-text').textContent = 'En línea';
+                await actualizarUI();
+            } catch (error) {
+                document.getElementById('connection-dot').classList.remove('connected');
+                document.getElementById('connection-text').textContent = 'Sin conexión';
+            }
+        }
+
+        // ==================== NOTIFICACIONES PUSH ====================
+        async function solicitarPermisoNotificaciones() {
+            if (!('Notification' in window)) {
+                console.log('Este navegador no soporta notificaciones');
+                return;
+            }
+            
+            if (Notification.permission === 'granted') {
+                console.log('Notificaciones ya permitidas');
+                return;
+            }
+            
+            if (Notification.permission !== 'denied') {
+                const permiso = await Notification.requestPermission();
+                if (permiso === 'granted') {
+                    mostrarToast('🔔 ¡Notificaciones activadas!');
+                }
+            }
+        }
+
+        function notificarPuntos(jugador, puntos) {
+            if (!('Notification' in window)) return;
+            
+            if (Notification.permission === 'granted') {
+                const emoji = jugador === 'Yesica' ? '👩' : '👨';
+                const titulo = `🚗 ¡${jugador} cazó un Agile!`;
+                const opciones = {
+                    body: `${emoji} ${jugador} sumó +${puntos} punto${puntos > 1 ? 's' : ''}`,
+                    icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🚗</text></svg>',
+                    badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🏁</text></svg>',
+                    tag: 'agile-hunter',
+                    vibrate: [200, 100, 200],
+                    requireInteraction: false,
+                    silent: false
+                };
+                
+                const notificacion = new Notification(titulo, opciones);
+                
+                // Cerrar notificación después de 5 segundos
+                setTimeout(() => notificacion.close(), 5000);
+                
+                // Click en la notificación abre/focaliza la página
+                notificacion.onclick = () => {
+                    window.focus();
+                    notificacion.close();
+                };
+            }
+        }
 
         // ==================== NAVEGACIÓN ====================
         function mostrarPantallaLogin() {
@@ -670,7 +819,6 @@
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('game-screen').style.display = 'block';
             document.getElementById('semana-label').textContent = obtenerRangoSemana();
-            actualizarUI();
         }
 
         function seleccionarJugador(nombre) {
@@ -678,10 +826,12 @@
             localStorage.setItem('agile_hunter_player', nombre);
             mostrarToast(`👋 ¡Hola ${nombre}! A cazar Agiles 🚗`);
             mostrarPantallaJuego();
+            inicializarDatos().then(() => iniciarActualizacionPeriodica());
         }
 
         function cambiarJugador() {
-            if (confirm('¿Querés cambiar de jugador? Se borrará la selección actual.')) {
+            if (confirm('¿Querés cambiar de jugador? Volverás a la pantalla de selección.')) {
+                if (refreshIntervalId) clearInterval(refreshIntervalId);
                 localStorage.removeItem('agile_hunter_player');
                 jugadorActual = null;
                 mostrarPantallaLogin();
@@ -709,7 +859,7 @@
             let patente = input.value.trim().toUpperCase();
             
             if (!patente || patente.length < 6) {
-                mostrarToast('⚠️ Ingresá una patente válida (6 o 7 caracteres)');
+                mostrarToast('⚠️ Ingresá una patente válida');
                 input.focus();
                 return;
             }
@@ -718,8 +868,7 @@
             document.getElementById('btn-buscar-datacar').style.display = 'none';
             document.getElementById('confirmacion-section').style.display = 'block';
             
-            // Abrir Datacar en nueva pestaña con la patente pre-cargada
-            window.open('https://www.datacar.com.ar/?plate=' + patente, '_blank');
+            window.open('https://www.datacar.com.ar', '_blank');
             
             mostrarToast('🌐 Revisá Datacar y volvé para confirmar');
         }
@@ -746,10 +895,11 @@
             const bonificacion = calcularBonificacion(distancia);
             
             document.getElementById('distancia-preview').textContent = Math.round(distancia) + ' km';
-            document.getElementById('bonus-preview').textContent = bonificacion > 0 ? '+' + bonificacion : 'Sin bonus';
+            document.getElementById('bonus-preview').textContent = bonificacion > 0 ? '+' + bonificacion + ' puntos extra' : 'Sin bonus';
         }
 
-        function guardarPatente() {
+        // ==================== CONEXIÓN CON GOOGLE SHEETS ====================
+        async function guardarPatente() {
             const provincia = document.getElementById('select-provincia').value;
             
             if (!provincia) {
@@ -762,119 +912,170 @@
                 return;
             }
 
-            // Verificar duplicados
-            const patentes = obtenerPatentes();
-            if (patentes.some(p => p.patente === patenteTemporal)) {
-                mostrarToast('⚠️ Esta patente ya fue registrada');
-                return;
-            }
-
-            const distancia = calcularDistancia(provincia);
-            const bonificacion = calcularBonificacion(distancia);
-            const puntos = 1 + bonificacion;
-            const semana = obtenerSemanaISO();
-
-            const nuevaPatente = {
-                patente: patenteTemporal,
-                jugador: jugadorActual,
-                provincia: provincia,
-                distancia_km: Math.round(distancia),
-                bonificacion: bonificacion,
-                puntos: puntos,
-                semana: semana,
-                timestamp: new Date().toISOString()
-            };
-
-            patentes.push(nuevaPatente);
-            guardarPatentes(patentes);
-
-            // Efectos visuales
-            lanzarConfetti(bonificacion > 0 ? 'gold' : 'green');
-            const mensaje = bonificacion > 0 
-                ? `🎉 ¡AGILE CAZADO! +${puntos} pts (${bonificacion} bonus) 🌟`
-                : `✅ ¡Agile! +${puntos} punto`;
-            mostrarToast(mensaje);
-
-            actualizarUI();
-            cerrarModal();
-        }
-
-        // ==================== DATOS (LocalStorage) ====================
-        function obtenerPatentes() {
             try {
-                return JSON.parse(localStorage.getItem('agile_hunter_patentes') || '[]');
-            } catch {
-                return [];
+                mostrarToast('⏳ Verificando patente...');
+                
+                // Verificar duplicado
+                const verificacion = await fetch(
+                    `${API_URL}?action=verificar&patente=${encodeURIComponent(patenteTemporal)}`
+                );
+                const dataVerificacion = await verificacion.json();
+                
+                if (!dataVerificacion.ok) {
+                    mostrarToast(dataVerificacion.mensaje);
+                    return;
+                }
+                
+                // Guardar patente
+                mostrarToast('⏳ Guardando...');
+                const url = `${API_URL}?action=guardar&patente=${encodeURIComponent(patenteTemporal)}&provincia=${encodeURIComponent(provincia)}&jugador=${encodeURIComponent(jugadorActual)}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.ok) {
+                    const d = data.datos;
+                    lanzarConfetti(d.bonificacion > 0 ? 'gold' : 'green');
+                    const mensaje = d.bonificacion > 0 
+                        ? `🎉 ¡AGILE CAZADO! +${d.puntos} pts (${d.bonificacion} bonus) 🌟`
+                        : `✅ ¡Agile! +${d.puntos} punto`;
+                    mostrarToast(mensaje);
+                    
+                    cerrarModal();
+                    await actualizarUI();
+                    
+                    // Forzar verificación inmediata para notificar al otro
+                    setTimeout(verificarCambios, 1000);
+                } else {
+                    mostrarToast(data.mensaje || '❌ Error al guardar');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarToast('❌ Error de conexión');
             }
         }
 
-        function guardarPatentes(patentes) {
-            localStorage.setItem('agile_hunter_patentes', JSON.stringify(patentes));
-        }
-
-        function cargarDatosJuego() {
-            actualizarUI();
-            // Mostrar ganador de semana anterior
-            setTimeout(mostrarGanadorSemanaAnterior, 1000);
-        }
-
-        function actualizarUI() {
-            const patentes = obtenerPatentes();
-            const semanaActual = obtenerSemanaISO();
-            
-            // Calcular puntajes semanales
-            let puntosYesica = 0, puntosOscar = 0;
-            patentes.filter(p => p.semana === semanaActual).forEach(p => {
-                if (p.jugador === 'Yesica') puntosYesica += p.puntos;
-                else if (p.jugador === 'Oscar') puntosOscar += p.puntos;
-            });
-
-            document.getElementById('score-yesica').textContent = puntosYesica;
-            document.getElementById('score-oscar').textContent = puntosOscar;
-
-            // Resaltar jugador activo
-            document.getElementById('card-yesica').classList.toggle('active', jugadorActual === 'Yesica');
-            document.getElementById('card-oscar').classList.toggle('active', jugadorActual === 'Oscar');
-
-            // Mostrar últimas patentes
-            const recientes = patentes.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 10);
-            const lista = document.getElementById('recent-list');
-            lista.innerHTML = recientes.map(p => `
-                <div class="recent-item">
-                    <span class="patente-badge">${p.patente}</span>
-                    <div class="patente-info">
-                        <div>${p.jugador} · ${p.provincia}</div>
-                        <div style="font-size:0.75rem;color:var(--text-secondary)">${formatearFecha(p.timestamp)}</div>
-                    </div>
-                    <span class="patente-points ${p.bonificacion > 0 ? 'bonus' : ''}">+${p.puntos}</span>
-                </div>
-            `).join('');
-        }
-
-        function mostrarGanadorSemanaAnterior() {
-            const patentes = obtenerPatentes();
-            const semanaActual = obtenerSemanaISO();
-            const semanaPasada = semanaActual - 1;
-            
-            const patentesSemanaPasada = patentes.filter(p => p.semana === semanaPasada);
-            if (patentesSemanaPasada.length === 0) return;
-
-            let puntosYesica = 0, puntosOscar = 0;
-            patentesSemanaPasada.forEach(p => {
-                if (p.jugador === 'Yesica') puntosYesica += p.puntos;
-                else puntosOscar += p.puntos;
-            });
-
-            let mensaje = '';
-            if (puntosYesica > puntosOscar) {
-                mensaje = `🏆 Yesica ganó la semana pasada (${puntosYesica} vs ${puntosOscar})`;
-            } else if (puntosOscar > puntosYesica) {
-                mensaje = `🏆 Oscar ganó la semana pasada (${puntosOscar} vs ${puntosYesica})`;
-            } else if (patentesSemanaPasada.length > 0) {
-                mensaje = `🤝 ¡Empate la semana pasada! (${puntosYesica} pts cada uno)`;
+        async function obtenerPuntajesActuales() {
+            try {
+                const semanaActual = obtenerSemanaISO();
+                const url = `${API_URL}?action=puntajes&semana=${semanaActual}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                return {
+                    yesica: data.datos?.Yesica || 0,
+                    oscar: data.datos?.Oscar || 0,
+                    ganador: data.datos?.ganador || 'Empate',
+                    totalPatentes: data.datos?.totalPatentes || 0
+                };
+            } catch (error) {
+                return { yesica: ultimoPuntajeYesica, oscar: ultimoPuntajeOscar, ganador: 'Error', totalPatentes: 0 };
             }
-            
-            if (mensaje) mostrarToast(mensaje);
+        }
+
+        async function actualizarUI() {
+            try {
+                const puntajes = await obtenerPuntajesActuales();
+                const scoreYesica = document.getElementById('score-yesica');
+                const scoreOscar = document.getElementById('score-oscar');
+                
+                // Animación si cambió el puntaje
+                if (parseInt(scoreYesica.textContent) !== puntajes.yesica) {
+                    scoreYesica.classList.add('changed');
+                    setTimeout(() => scoreYesica.classList.remove('changed'), 500);
+                }
+                if (parseInt(scoreOscar.textContent) !== puntajes.oscar) {
+                    scoreOscar.classList.add('changed');
+                    setTimeout(() => scoreOscar.classList.remove('changed'), 500);
+                }
+                
+                scoreYesica.textContent = puntajes.yesica;
+                scoreOscar.textContent = puntajes.oscar;
+                
+                // Resaltar jugador activo
+                document.getElementById('card-yesica').classList.toggle('active', jugadorActual === 'Yesica');
+                document.getElementById('card-oscar').classList.toggle('active', jugadorActual === 'Oscar');
+                
+                // Obtener últimas patentes
+                const urlPatentes = `${API_URL}?action=consultar`;
+                const responsePatentes = await fetch(urlPatentes);
+                const dataPatentes = await responsePatentes.json();
+                
+                if (dataPatentes.ok) {
+                    const recientes = dataPatentes.datos.slice(0, 15);
+                    const lista = document.getElementById('recent-list');
+                    lista.innerHTML = recientes.map(p => `
+                        <div class="recent-item">
+                            <span class="patente-badge">${p.patente}</span>
+                            <div class="patente-info">
+                                <div>${p.jugador} · ${p.provincia}</div>
+                                <small>${p.fecha} ${p.hora}</small>
+                            </div>
+                            <span class="patente-points ${p.bonificacion > 0 ? 'bonus' : ''}">+${p.puntos}</span>
+                        </div>
+                    `).join('');
+                }
+                
+            } catch (error) {
+                console.error('Error actualizando UI:', error);
+            }
+        }
+
+        async function mostrarGanadorSemanaAnterior() {
+            try {
+                const semanaActual = obtenerSemanaISO();
+                const semanaPasada = semanaActual - 1;
+                
+                const url = `${API_URL}?action=puntajes&semana=${semanaPasada}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.ok && data.datos.totalPatentes > 0) {
+                    const d = data.datos;
+                    let mensaje = '';
+                    if (d.Yesica > d.Oscar) {
+                        mensaje = `🏆 Yesica ganó la semana pasada (${d.Yesica} vs ${d.Oscar})`;
+                    } else if (d.Oscar > d.Yesica) {
+                        mensaje = `🏆 Oscar ganó la semana pasada (${d.Oscar} vs ${d.Yesica})`;
+                    } else {
+                        mensaje = `🤝 ¡Empate la semana pasada! (${d.Yesica} pts)`;
+                    }
+                    setTimeout(() => mostrarToast(mensaje), 1000);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function descargarExcel() {
+            try {
+                mostrarToast('⏳ Preparando descarga...');
+                const url = `${API_URL}?action=consultar`;
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (!data.ok || data.datos.length === 0) {
+                    mostrarToast('📭 No hay patentes para descargar');
+                    return;
+                }
+                
+                let csv = 'Fecha,Hora,Patente,¿Es Agile?,Provincia,Bonificación,Puntos,Jugador,Semana\n';
+                data.datos.reverse().forEach(p => {
+                    csv += `${p.fecha},${p.hora},${p.patente},${p.esAgile},${p.provincia},${p.bonificacion},${p.puntos},${p.jugador},${p.semana}\n`;
+                });
+                
+                const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+                const urlBlob = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = urlBlob;
+                a.download = `agile_hunter_${new Date().toISOString().split('T')[0]}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(urlBlob);
+                mostrarToast('📥 ¡Excel descargado!');
+            } catch (error) {
+                mostrarToast('❌ Error al descargar');
+            }
         }
 
         // ==================== CÁLCULOS ====================
@@ -882,7 +1083,7 @@
             const [lat1, lon1] = PROVINCIAS['Catamarca'];
             const [lat2, lon2] = PROVINCIAS[provincia] || PROVINCIAS['Catamarca'];
             
-            const R = 6371; // Radio terrestre en km
+            const R = 6371;
             const dLat = (lat2 - lat1) * Math.PI / 180;
             const dLon = (lon2 - lon1) * Math.PI / 180;
             const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
@@ -915,18 +1116,13 @@
             domingo.setDate(lunes.getDate() + 6);
             
             const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-            return `${lunes.getDate()} ${meses[lunes.getMonth()]} → ${domingo.getDate()} ${meses[domingo.getMonth()]}`;
-        }
-
-        function formatearFecha(isoString) {
-            const fecha = new Date(isoString);
-            return `${fecha.getDate()}/${fecha.getMonth()+1} ${fecha.getHours()}:${String(fecha.getMinutes()).padStart(2,'0')}`;
+            return `Semana: ${lunes.getDate()} ${meses[lunes.getMonth()]} → ${domingo.getDate()} ${meses[domingo.getMonth()]}`;
         }
 
         // ==================== UTILIDADES ====================
         function llenarSelectProvincias() {
             const select = document.getElementById('select-provincia');
-            select.innerHTML = '<option value="">-- Seleccionar --</option>';
+            select.innerHTML = '<option value="">-- Seleccionar provincia --</option>';
             Object.keys(PROVINCIAS).sort().forEach(prov => {
                 select.innerHTML += `<option value="${prov}">${prov}</option>`;
             });
@@ -936,19 +1132,19 @@
             const params = new URLSearchParams(window.location.search);
             if (!params.get('plate')) return;
 
-            // Si el usuario viene de Datacar con el userscript
             const patente = params.get('plate');
             const esAgile = params.get('agile') === '1';
             const provincia = params.get('province');
 
             if (esAgile && provincia && jugadorActual) {
-                // Precargar datos
                 document.getElementById('input-patente').value = patente;
                 patenteTemporal = patente;
                 document.getElementById('select-provincia').value = provincia;
+                document.getElementById('confirmacion-section').style.display = 'block';
+                document.getElementById('provincia-section').style.display = 'block';
+                document.getElementById('btn-buscar-datacar').style.display = 'none';
                 actualizarPreviewDistancia();
                 
-                // Preguntar si quiere guardar
                 setTimeout(() => {
                     if (confirm(`¿Guardar patente ${patente} como Agile de ${provincia}?`)) {
                         guardarPatente();
@@ -956,35 +1152,10 @@
                 }, 500);
             }
 
-            // Limpiar URL
             window.history.replaceState({}, document.title, window.location.pathname);
         }
 
-        function descargarExcel() {
-            const patentes = obtenerPatentes();
-            if (patentes.length === 0) {
-                mostrarToast('📭 No hay patentes para descargar');
-                return;
-            }
-
-            let csv = 'Patente,Jugador,Provincia,Distancia (km),Bonificación,Puntos,Semana,Fecha\n';
-            patentes.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)).forEach(p => {
-                csv += `${p.patente},${p.jugador},${p.provincia},${p.distancia_km},${p.bonificacion},${p.puntos},${p.semana},"${p.timestamp}"\n`;
-            });
-
-            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `agile_hunter_${new Date().toISOString().split('T')[0]}.csv`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            mostrarToast('📥 ¡Excel descargado!');
-        }
-
-        // ==================== TOAST & NOTIFICACIONES ====================
+        // ==================== TOAST ====================
         let toastTimeout;
         function mostrarToast(mensaje) {
             const toast = document.getElementById('toast');
@@ -1011,14 +1182,14 @@
                 ? ['#f0b90b','#ffd700','#e5a600','#f39c12','#ffed4a']
                 : ['#00a859','#2ecc71','#27ae60','#1abc9c','#58d68d'];
             
-            for (let i = 0; i < 100; i++) {
+            for (let i = 0; i < 150; i++) {
                 particulas.push({
                     x: Math.random() * canvas.width,
                     y: -20 - Math.random() * canvas.height,
-                    vx: (Math.random() - 0.5) * 6,
-                    vy: Math.random() * 3 + 2,
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: Math.random() * 4 + 2,
                     color: colores[Math.floor(Math.random() * colores.length)],
-                    size: Math.random() * 8 + 3,
+                    size: Math.random() * 10 + 4,
                     rotacion: Math.random() * 360,
                     rotVel: (Math.random() - 0.5) * 15,
                     forma: Math.random() > 0.5 ? 'rect' : 'circle'
@@ -1036,13 +1207,14 @@
             particulas.forEach(p => {
                 p.y += p.vy;
                 p.x += p.vx;
-                p.vy += 0.05; // gravedad
+                p.vy += 0.08;
                 p.rotacion += p.rotVel;
                 
                 ctx.save();
                 ctx.translate(p.x, p.y);
                 ctx.rotate(p.rotacion * Math.PI / 180);
                 ctx.fillStyle = p.color;
+                ctx.globalAlpha = 0.9;
                 
                 if (p.forma === 'circle') {
                     ctx.beginPath();
@@ -1064,7 +1236,7 @@
             }
         }
 
-        // ==================== REGISTRAR SERVICE WORKER ====================
+        // ==================== SERVICE WORKER ====================
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('service-worker.js').catch(() => {});
