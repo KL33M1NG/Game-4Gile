@@ -1,16 +1,50 @@
 {
-    "name": "Agile Hunter",
+    "name": "Agile Hunter - Oscar & Yesica",
     "short_name": "AgileHunter",
-    "description": "Juego de caza de Chevrolet Agile para Yesica y Oscar",
+    "description": "Juego de caza de Chevrolet Agile - ¿Quién encuentra más?",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#1a1a2e",
-    "theme_color": "#1a1a2e",
+    "background_color": "#0d1117",
+    "theme_color": "#00a859",
+    "orientation": "portrait",
+    "lang": "es-AR",
+    "categories": ["games", "entertainment"],
     "icons": [
         {
-            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2300a859'/><text y='.75em' x='50' text-anchor='middle' font-size='60'>🚗</text></svg>",
-            "sizes": "any",
-            "type": "image/svg+xml"
+            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><defs><linearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' style='stop-color:%2300a859;stop-opacity:1'/><stop offset='100%25' style='stop-color:%232ecc71;stop-opacity:1'/></linearGradient></defs><rect width='512' height='512' rx='100' fill='url(%23grad)'/><text x='256' y='320' font-size='280' text-anchor='middle' fill='white' font-family='Arial'>🚗</text><text x='256' y='420' font-size='60' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>AGILE</text></svg>",
+            "sizes": "512x512",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><defs><linearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' style='stop-color:%2300a859;stop-opacity:1'/><stop offset='100%25' style='stop-color:%232ecc71;stop-opacity:1'/></linearGradient></defs><rect width='192' height='192' rx='38' fill='url(%23grad)'/><text x='96' y='130' font-size='110' text-anchor='middle' fill='white' font-family='Arial'>🚗</text></svg>",
+            "sizes": "192x192",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><defs><linearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' style='stop-color:%2300a859;stop-opacity:1'/><stop offset='100%25' style='stop-color:%232ecc71;stop-opacity:1'/></linearGradient></defs><rect width='512' height='512' rx='100' fill='url(%23grad)'/><text x='256' y='320' font-size='280' text-anchor='middle' fill='white' font-family='Arial'>🚗</text></svg>",
+            "sizes": "512x512",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1080 1920'><rect width='1080' height='1920' fill='%230d1117'/><text x='540' y='960' font-size='400' text-anchor='middle' fill='white'>🚗</text><text x='540' y='1400' font-size='60' text-anchor='middle' fill='%232ecc71'>AGILE HUNTER</text></svg>",
+            "sizes": "1080x1920",
+            "type": "image/svg+xml",
+            "form_factor": "narrow"
+        }
+    ],
+    "prefer_related_applications": false,
+    "related_applications": [],
+    "shortcuts": [
+        {
+            "name": "Anotar patente",
+            "short_name": "Anotar",
+            "description": "Registrar una nueva patente de Agile",
+            "url": "."
         }
     ]
 }
