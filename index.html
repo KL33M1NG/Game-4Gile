@@ -11,10 +11,8 @@
     <link rel="manifest" href="manifest.json">
     <style>
         :root {
-            /* Modo Claro (día) */
             --bg: #f0f2f5;
             --bg-card: rgba(255,255,255,0.9);
-            --bg-card-hover: rgba(255,255,255,1);
             --text: #1a1a2e;
             --text-secondary: #555;
             --border: rgba(0,0,0,0.1);
@@ -23,20 +21,20 @@
             --accent-glow: rgba(0,168,89,0.3);
             --gold: #f0b90b;
             --gold-glow: rgba(240,185,11,0.4);
-            --danger: #e74c3c;
             --input-bg: rgba(0,0,0,0.05);
             --toast-bg: #1a1a2e;
             --toast-text: white;
             --modal-overlay: rgba(0,0,0,0.6);
             --gradient: linear-gradient(135deg, #00a859, #2ecc71);
             --btn-text: white;
+            --card-yesica: #e8f5e9;
+            --card-oscar: #e3f2fd;
         }
 
         @media (prefers-color-scheme: dark) {
             :root {
                 --bg: #0d1117;
                 --bg-card: rgba(22,27,34,0.95);
-                --bg-card-hover: rgba(30,37,47,1);
                 --text: #e6edf3;
                 --text-secondary: #8b949e;
                 --border: rgba(255,255,255,0.08);
@@ -50,7 +48,8 @@
                 --toast-text: #0d1117;
                 --modal-overlay: rgba(0,0,0,0.8);
                 --gradient: linear-gradient(135deg, #2ecc71, #00a859);
-                --btn-text: white;
+                --card-yesica: rgba(46,204,113,0.1);
+                --card-oscar: rgba(52,152,219,0.1);
             }
         }
 
@@ -67,8 +66,6 @@
             align-items: center;
             padding: 1rem;
             transition: background 0.5s ease, color 0.5s ease;
-            position: relative;
-            overflow-x: hidden;
         }
 
         body::before {
@@ -123,7 +120,7 @@
             margin: 0;
         }
 
-        .online-badge {
+        .connection-status {
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -131,7 +128,7 @@
             color: var(--text-secondary);
         }
 
-        .online-dot {
+        .status-dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
@@ -139,7 +136,7 @@
             animation: pulse 2s infinite;
         }
 
-        .online-dot.connected {
+        .status-dot.online {
             background: #2ecc71;
         }
 
@@ -154,6 +151,15 @@
             color: var(--text-secondary);
             margin-bottom: 1.5rem;
             font-weight: 400;
+        }
+
+        .login-screen {
+            text-align: center;
+        }
+
+        .login-screen p {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
         }
 
         .login-buttons {
@@ -175,10 +181,10 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
             width: 100%;
             color: var(--btn-text);
+            position: relative;
+            overflow: hidden;
         }
 
         .btn::after {
@@ -204,16 +210,6 @@
 
         .btn-primary:active { transform: scale(0.97); }
 
-        .btn-gold {
-            background: linear-gradient(135deg, #f0b90b, #e5a600);
-            box-shadow: 0 4px 15px var(--gold-glow);
-        }
-
-        .btn-gold:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px var(--gold-glow);
-        }
-
         .btn-outline {
             background: transparent;
             border: 2px solid var(--border);
@@ -236,9 +232,8 @@
 
         .player-card {
             flex: 1;
-            background: var(--input-bg);
             border-radius: 16px;
-            padding: 1rem;
+            padding: 1.2rem 1rem;
             text-align: center;
             border: 2px solid transparent;
             transition: all 0.3s ease;
@@ -246,24 +241,33 @@
             overflow: hidden;
         }
 
+        .player-card.yesica {
+            background: var(--card-yesica);
+        }
+
+        .player-card.oscar {
+            background: var(--card-oscar);
+        }
+
         .player-card.active {
             border-color: var(--accent);
             box-shadow: 0 0 20px var(--accent-glow);
+            transform: scale(1.03);
         }
 
         .player-card .player-emoji {
-            font-size: 2rem;
+            font-size: 2.5rem;
             margin-bottom: 0.25rem;
         }
 
         .player-card .player-name {
             font-weight: 700;
-            font-size: 1rem;
-            margin-bottom: 0.25rem;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
         }
 
         .player-card .player-score {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 900;
             background: var(--gradient);
             -webkit-background-clip: text;
@@ -272,19 +276,27 @@
             transition: all 0.3s ease;
         }
 
-        .player-card .player-score.changed {
+        .player-card .player-score.pop {
             animation: scorePop 0.5s ease;
         }
 
         @keyframes scorePop {
             0% { transform: scale(1); }
-            50% { transform: scale(1.3); }
+            50% { transform: scale(1.4); }
             100% { transform: scale(1); }
         }
 
-        .player-card .player-bonus {
+        .player-card .player-subtitle {
             font-size: 0.75rem;
             color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin: 1rem 0;
         }
 
         .section-title {
@@ -296,16 +308,16 @@
             text-align: center;
         }
 
-        .recent-list {
-            max-height: 300px;
+        .patent-list {
+            max-height: 350px;
             overflow-y: auto;
             border-radius: 12px;
             background: var(--input-bg);
             padding: 0.5rem;
         }
 
-        .recent-list:empty::after {
-            content: '📭 No hay patentes aún... ¡A cazar!';
+        .patent-list:empty::after {
+            content: '📭 Ningún Agile registrado aún... ¡A buscar!';
             display: block;
             text-align: center;
             padding: 2rem 1rem;
@@ -313,7 +325,7 @@
             font-style: italic;
         }
 
-        .recent-item {
+        .patent-item {
             display: flex;
             align-items: center;
             gap: 0.75rem;
@@ -329,36 +341,36 @@
             to { opacity: 1; transform: translateX(0); }
         }
 
-        .recent-item .patente-badge {
+        .patent-item .patent-plate {
             background: var(--gradient);
             color: white;
-            padding: 0.3rem 0.6rem;
-            border-radius: 6px;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
             font-weight: 700;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-            min-width: 70px;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            min-width: 75px;
             text-align: center;
         }
 
-        .recent-item .patente-info {
+        .patent-item .patent-details {
             flex: 1;
             font-size: 0.85rem;
         }
 
-        .recent-item .patente-info small {
+        .patent-item .patent-details small {
             color: var(--text-secondary);
             font-size: 0.75rem;
+            display: block;
         }
 
-        .recent-item .patente-points {
+        .patent-item .patent-points {
             font-weight: 700;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--accent);
-        }
-
-        .recent-item .patente-points.bonus {
-            color: var(--gold);
+            background: var(--accent-glow);
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
         }
 
         /* Modal */
@@ -386,7 +398,7 @@
             border-radius: 20px;
             padding: 2rem 1.5rem;
             width: 100%;
-            max-width: 420px;
+            max-width: 400px;
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
             animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -400,10 +412,11 @@
         .modal h3 {
             text-align: center;
             margin-bottom: 1.5rem;
+            font-size: 1.3rem;
         }
 
         .input-group {
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
         }
 
         .input-group label {
@@ -414,75 +427,35 @@
             color: var(--text-secondary);
         }
 
-        .modern-input {
+        .plate-input {
             width: 100%;
-            padding: 0.9rem 1rem;
+            padding: 1rem;
             border: 2px solid var(--border);
             border-radius: 12px;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             background: var(--input-bg);
             color: var(--text);
-            transition: all 0.3s ease;
-            letter-spacing: 2px;
-            font-weight: 600;
+            letter-spacing: 3px;
+            font-weight: 700;
             text-align: center;
             text-transform: uppercase;
-        }
-
-        .modern-input:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-glow);
-        }
-
-        .modern-select {
-            width: 100%;
-            padding: 0.9rem 1rem;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            font-size: 1rem;
-            background: var(--input-bg);
-            color: var(--text);
             transition: all 0.3s ease;
         }
 
-        .modern-select:focus {
+        .plate-input:focus {
             outline: none;
             border-color: var(--accent);
             box-shadow: 0 0 0 3px var(--accent-glow);
         }
 
-        .btn-group {
+        .modal-actions {
             display: flex;
             gap: 0.75rem;
-            margin-top: 1rem;
+            margin-top: 1.5rem;
         }
 
-        .btn-group .btn { flex: 1; }
-
-        .divider {
-            border: none;
-            border-top: 1px solid var(--border);
-            margin: 1.5rem 0;
-        }
-
-        .preview-info {
-            background: var(--input-bg);
-            border-radius: 12px;
-            padding: 1rem;
-            margin: 1rem 0;
-            text-align: center;
-        }
-
-        .preview-info .preview-distance {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--accent);
-        }
-
-        .preview-info .preview-bonus {
-            font-size: 1.2rem;
-            color: var(--gold);
+        .modal-actions .btn {
+            flex: 1;
         }
 
         /* Toast */
@@ -527,13 +500,25 @@
             border-radius: 3px;
         }
 
+        .winner-banner {
+            background: var(--gradient);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            font-weight: 600;
+            animation: slideIn 0.5s ease;
+        }
+
         @media (max-width: 400px) {
             .container {
                 padding: 1.5rem 1rem;
                 border-radius: 20px;
             }
             h1 { font-size: 1.5rem; }
-            .player-card .player-score { font-size: 2rem; }
+            .player-card .player-score { font-size: 2.5rem; }
+            .patent-item .patent-plate { font-size: 0.8rem; min-width: 65px; }
         }
     </style>
 </head>
@@ -541,12 +526,10 @@
 
     <div class="container" id="app-container">
         <!-- Pantalla de Login -->
-        <div id="login-screen">
+        <div id="login-screen" class="login-screen">
             <h1>🏁 Agile Hunter</h1>
             <h2>El juego de cazar Chevrolet Agile</h2>
-            <p style="text-align:center;margin-bottom:1.5rem;color:var(--text-secondary)">
-                ¿Quién está jugando ahora?
-            </p>
+            <p>¿Quién está jugando ahora?</p>
             <div class="login-buttons">
                 <button class="btn btn-primary" onclick="seleccionarJugador('Yesica')">
                     <span>👩</span> Soy Yesica
@@ -555,8 +538,8 @@
                     <span>👨</span> Soy Oscar
                 </button>
             </div>
-            <p style="text-align:center;font-size:0.8rem;color:var(--text-secondary);margin-top:1rem;">
-                📱 Esto se guardará en tu teléfono
+            <p style="font-size:0.8rem;color:var(--text-secondary);margin-top:1rem;">
+                📱 Se guardará en tu teléfono
             </p>
         </div>
 
@@ -564,89 +547,68 @@
         <div id="game-screen" style="display:none;">
             <div class="header">
                 <h1>🏁 Agile Hunter</h1>
-                <div class="online-badge">
-                    <span class="online-dot" id="connection-dot"></span>
-                    <span id="connection-text">Conectando...</span>
+                <div class="connection-status">
+                    <span class="status-dot" id="status-dot"></span>
+                    <span id="status-text">Conectando...</span>
                     <button class="btn btn-outline btn-small" onclick="cambiarJugador()" title="Cambiar jugador">🔄</button>
                 </div>
             </div>
             <h2 id="semana-label">Cargando...</h2>
 
             <div class="scoreboard">
-                <div class="player-card" id="card-yesica">
+                <div class="player-card yesica" id="card-yesica">
                     <div class="player-emoji">👩</div>
                     <div class="player-name">Yesica</div>
                     <div class="player-score" id="score-yesica">0</div>
-                    <div class="player-bonus">puntos</div>
+                    <div class="player-subtitle">Agiles cazados</div>
                 </div>
-                <div class="player-card" id="card-oscar">
+                <div class="player-card oscar" id="card-oscar">
                     <div class="player-emoji">👨</div>
                     <div class="player-name">Oscar</div>
                     <div class="player-score" id="score-oscar">0</div>
-                    <div class="player-bonus">puntos</div>
+                    <div class="player-subtitle">Agiles cazados</div>
                 </div>
             </div>
 
-            <button class="btn btn-primary" onclick="abrirModalPatente()">
-                <span>➕</span> Anotar patente
-            </button>
-            <button class="btn btn-outline" style="margin-top:0.5rem;" onclick="descargarExcel()">
-                <span>📥</span> Descargar Excel
-            </button>
+            <div class="actions">
+                <button class="btn btn-primary" onclick="abrirModalPatente()">
+                    <span>➕</span> ¡Anotar Agile!
+                </button>
+                <button class="btn btn-outline" onclick="descargarExcel()">
+                    <span>📥</span> Descargar Excel
+                </button>
+            </div>
 
-            <div class="section-title">📋 Últimas capturas</div>
-            <div class="recent-list" id="recent-list"></div>
+            <div id="winner-banner" style="display:none;"></div>
+
+            <div class="section-title">📋 Últimos Agiles cazados</div>
+            <div class="patent-list" id="patent-list"></div>
         </div>
     </div>
 
-    <!-- Modal para ingresar patente -->
+    <!-- Modal para cargar patente -->
     <div class="modal-overlay" id="modal-patente" style="display:none;">
         <div class="modal">
-            <h3>🔍 Nueva captura</h3>
+            <h3>🚗 ¡Agile avistado!</h3>
             <p style="text-align:center;color:var(--text-secondary);margin-bottom:1rem;font-size:0.9rem;">
                 Jugador: <strong id="modal-jugador"></strong>
             </p>
             
             <div class="input-group">
                 <label>Patente del vehículo</label>
-                <input type="text" class="modern-input" id="input-patente" 
+                <input type="text" class="plate-input" id="input-patente" 
                        placeholder="AB123CD" maxlength="7"
                        autocomplete="off" spellcheck="false">
             </div>
             
-            <button class="btn btn-primary" id="btn-buscar-datacar" onclick="buscarEnDatacar()">
-                <span>🌐</span> Buscar en Datacar
-            </button>
-            
-            <div id="confirmacion-section" style="display:none;">
-                <hr class="divider">
-                <p style="text-align:center;margin-bottom:1rem;font-weight:600;">
-                    ¿Es un Chevrolet Agile?
-                </p>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="esAgile(true)">✅ Sí</button>
-                    <button class="btn btn-outline" onclick="esAgile(false)">❌ No</button>
-                </div>
-                <div id="provincia-section" style="display:none;">
-                    <div class="input-group" style="margin-top:1rem;">
-                        <label>Provincia de radicación</label>
-                        <select class="modern-select" id="select-provincia"></select>
-                    </div>
-                    <div class="preview-info">
-                        <p style="color:var(--text-secondary);margin-bottom:0.5rem;">📍 Distancia a Catamarca</p>
-                        <div class="preview-distance" id="distancia-preview">- km</div>
-                        <p style="color:var(--text-secondary);margin-top:0.5rem;">⭐ Bonificación</p>
-                        <div class="preview-bonus" id="bonus-preview">-</div>
-                    </div>
-                    <button class="btn btn-gold" onclick="guardarPatente()">
-                        <span>🚀</span> ¡Anotar Agile!
-                    </button>
-                </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="cerrarModal()">
+                    ❌ Cancelar
+                </button>
+                <button class="btn btn-primary" onclick="guardarPatente()">
+                    <span>✅</span> Confirmar Agile
+                </button>
             </div>
-            
-            <button class="btn btn-outline" style="margin-top:0.75rem;" onclick="cerrarModal()">
-                ❌ Cancelar
-            </button>
         </div>
     </div>
 
@@ -658,52 +620,17 @@
 
     <script>
         // ==================== CONFIGURACIÓN ====================
-        // ⚠️ PEGÁ ACÁ TU URL DE GOOGLE APPS SCRIPT
-        const API_URL = 'https://script.google.com/macros/s/AKfycbzwk73U_QC5R5aZvxZbR9nF75dxLnYZLuvWj2zF95tmUPLzb9RGtFk1_tbTtq68f4f_yw/exec';
-        
-        // Intervalo de actualización (milisegundos)
-        const REFRESH_INTERVAL = 5000; // 5 segundos
-
-        // Coordenadas de capitales provinciales
-        const PROVINCIAS = {
-            'Buenos Aires': [-34.6037, -58.3816],
-            'Catamarca': [-28.4696, -65.7852],
-            'Chaco': [-27.4511, -58.9867],
-            'Chubut': [-43.3000, -65.1000],
-            'Córdoba': [-31.4201, -64.1888],
-            'Corrientes': [-27.4806, -58.8346],
-            'Entre Ríos': [-31.7333, -60.5333],
-            'Formosa': [-26.1831, -58.1758],
-            'Jujuy': [-24.1858, -65.2995],
-            'La Pampa': [-36.6167, -64.2833],
-            'La Rioja': [-29.4131, -66.8558],
-            'Mendoza': [-32.8895, -68.8458],
-            'Misiones': [-27.3671, -55.8960],
-            'Neuquén': [-38.9516, -68.0591],
-            'Río Negro': [-40.8000, -63.0000],
-            'Salta': [-24.7859, -65.4117],
-            'San Juan': [-31.5375, -68.5364],
-            'San Luis': [-33.2994, -66.3362],
-            'Santa Cruz': [-51.6226, -69.2181],
-            'Santa Fe': [-31.6333, -60.7000],
-            'Santiago del Estero': [-27.7951, -64.2615],
-            'Tierra del Fuego': [-54.8000, -68.3000],
-            'Tucumán': [-26.8241, -65.2226]
-        };
+        const API_URL = 'https://script.google.com/macros/s/TU_ID_ACA/exec';
+        const REFRESH_INTERVAL = 5000;
 
         // ==================== ESTADO ====================
         let jugadorActual = localStorage.getItem('agile_hunter_player') || null;
-        let patenteTemporal = '';
         let ultimoPuntajeYesica = 0;
         let ultimoPuntajeOscar = 0;
         let refreshIntervalId = null;
 
         // ==================== INICIALIZACIÓN ====================
         window.addEventListener('DOMContentLoaded', async () => {
-            llenarSelectProvincias();
-            setupProvinciaChange();
-            
-            // Solicitar permiso de notificaciones
             solicitarPermisoNotificaciones();
             
             if (jugadorActual) {
@@ -713,8 +640,6 @@
             } else {
                 mostrarPantallaLogin();
             }
-            
-            verificarParametrosURL();
         });
 
         async function inicializarDatos() {
@@ -734,43 +659,35 @@
             try {
                 const puntajes = await obtenerPuntajesActuales();
                 
-                // Verificar si Yesica anotó (cuando el jugador actual es Oscar)
                 if (jugadorActual === 'Oscar' && puntajes.yesica > ultimoPuntajeYesica) {
                     const diferencia = puntajes.yesica - ultimoPuntajeYesica;
                     notificarPuntos('Yesica', diferencia);
-                    mostrarToast(`📲 ¡Yesica sumó +${diferencia} puntos!`);
+                    mostrarToast(`📲 ¡Yesica cazó un Agile! +1 punto`);
                 }
                 
-                // Verificar si Oscar anotó (cuando el jugador actual es Yesica)
                 if (jugadorActual === 'Yesica' && puntajes.oscar > ultimoPuntajeOscar) {
                     const diferencia = puntajes.oscar - ultimoPuntajeOscar;
                     notificarPuntos('Oscar', diferencia);
-                    mostrarToast(`📲 ¡Oscar sumó +${diferencia} puntos!`);
+                    mostrarToast(`📲 ¡Oscar cazó un Agile! +1 punto`);
                 }
                 
                 ultimoPuntajeYesica = puntajes.yesica;
                 ultimoPuntajeOscar = puntajes.oscar;
                 
-                document.getElementById('connection-dot').classList.add('connected');
-                document.getElementById('connection-text').textContent = 'En línea';
+                document.getElementById('status-dot').classList.add('online');
+                document.getElementById('status-text').textContent = 'En línea';
                 await actualizarUI();
             } catch (error) {
-                document.getElementById('connection-dot').classList.remove('connected');
-                document.getElementById('connection-text').textContent = 'Sin conexión';
+                document.getElementById('status-dot').classList.remove('online');
+                document.getElementById('status-text').textContent = 'Sin conexión';
             }
         }
 
-        // ==================== NOTIFICACIONES PUSH ====================
+        // ==================== NOTIFICACIONES ====================
         async function solicitarPermisoNotificaciones() {
-            if (!('Notification' in window)) {
-                console.log('Este navegador no soporta notificaciones');
-                return;
-            }
+            if (!('Notification' in window)) return;
             
-            if (Notification.permission === 'granted') {
-                console.log('Notificaciones ya permitidas');
-                return;
-            }
+            if (Notification.permission === 'granted') return;
             
             if (Notification.permission !== 'denied') {
                 const permiso = await Notification.requestPermission();
@@ -785,23 +702,17 @@
             
             if (Notification.permission === 'granted') {
                 const emoji = jugador === 'Yesica' ? '👩' : '👨';
-                const titulo = `🚗 ¡${jugador} cazó un Agile!`;
-                const opciones = {
-                    body: `${emoji} ${jugador} sumó +${puntos} punto${puntos > 1 ? 's' : ''}`,
+                const notificacion = new Notification(`🚗 ¡${jugador} cazó un Agile!`, {
+                    body: `${emoji} ${jugador} sumó +${puntos} punto${puntos > 1 ? 's' : ''} 🏁`,
                     icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🚗</text></svg>',
                     badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🏁</text></svg>',
                     tag: 'agile-hunter',
                     vibrate: [200, 100, 200],
-                    requireInteraction: false,
-                    silent: false
-                };
+                    requireInteraction: false
+                });
                 
-                const notificacion = new Notification(titulo, opciones);
-                
-                // Cerrar notificación después de 5 segundos
                 setTimeout(() => notificacion.close(), 5000);
                 
-                // Click en la notificación abre/focaliza la página
                 notificacion.onclick = () => {
                     window.focus();
                     notificacion.close();
@@ -840,13 +751,9 @@
 
         // ==================== MODAL DE PATENTE ====================
         function abrirModalPatente() {
-            patenteTemporal = '';
             document.getElementById('input-patente').value = '';
-            document.getElementById('confirmacion-section').style.display = 'none';
-            document.getElementById('provincia-section').style.display = 'none';
             document.getElementById('modal-jugador').textContent = jugadorActual;
             document.getElementById('modal-patente').style.display = 'flex';
-            document.getElementById('btn-buscar-datacar').style.display = 'block';
             setTimeout(() => document.getElementById('input-patente').focus(), 100);
         }
 
@@ -854,103 +761,50 @@
             document.getElementById('modal-patente').style.display = 'none';
         }
 
-        function buscarEnDatacar() {
-            const input = document.getElementById('input-patente');
-            let patente = input.value.trim().toUpperCase();
-            
-            if (!patente || patente.length < 6) {
-                mostrarToast('⚠️ Ingresá una patente válida');
-                input.focus();
-                return;
-            }
-
-            patenteTemporal = patente;
-            document.getElementById('btn-buscar-datacar').style.display = 'none';
-            document.getElementById('confirmacion-section').style.display = 'block';
-            
-            window.open('https://www.datacar.com.ar', '_blank');
-            
-            mostrarToast('🌐 Revisá Datacar y volvé para confirmar');
-        }
-
-        function esAgile(confirmado) {
-            if (!confirmado) {
-                mostrarToast('❌ No es Agile, no suma puntos');
-                cerrarModal();
-                return;
-            }
-            document.getElementById('provincia-section').style.display = 'block';
-            actualizarPreviewDistancia();
-        }
-
-        function setupProvinciaChange() {
-            document.getElementById('select-provincia').addEventListener('change', actualizarPreviewDistancia);
-        }
-
-        function actualizarPreviewDistancia() {
-            const provincia = document.getElementById('select-provincia').value;
-            if (!provincia) return;
-            
-            const distancia = calcularDistancia(provincia);
-            const bonificacion = calcularBonificacion(distancia);
-            
-            document.getElementById('distancia-preview').textContent = Math.round(distancia) + ' km';
-            document.getElementById('bonus-preview').textContent = bonificacion > 0 ? '+' + bonificacion + ' puntos extra' : 'Sin bonus';
-        }
-
         // ==================== CONEXIÓN CON GOOGLE SHEETS ====================
         async function guardarPatente() {
-            const provincia = document.getElementById('select-provincia').value;
+            const input = document.getElementById('input-patente');
+            const patente = input.value.trim().toUpperCase();
             
-            if (!provincia) {
-                mostrarToast('⚠️ Seleccioná la provincia de radicación');
-                return;
-            }
-
-            if (!patenteTemporal) {
-                mostrarToast('⚠️ Primero buscá la patente en Datacar');
+            if (!patente || patente.length < 6) {
+                mostrarToast('⚠️ Ingresá una patente válida (6 o 7 caracteres)');
+                input.focus();
                 return;
             }
 
             try {
                 mostrarToast('⏳ Verificando patente...');
                 
-                // Verificar duplicado
                 const verificacion = await fetch(
-                    `${API_URL}?action=verificar&patente=${encodeURIComponent(patenteTemporal)}`
+                    `${API_URL}?action=verificar&patente=${encodeURIComponent(patente)}`
                 );
                 const dataVerificacion = await verificacion.json();
                 
                 if (!dataVerificacion.ok) {
                     mostrarToast(dataVerificacion.mensaje);
+                    input.focus();
                     return;
                 }
                 
-                // Guardar patente
-                mostrarToast('⏳ Guardando...');
-                const url = `${API_URL}?action=guardar&patente=${encodeURIComponent(patenteTemporal)}&provincia=${encodeURIComponent(provincia)}&jugador=${encodeURIComponent(jugadorActual)}`;
+                mostrarToast('⏳ Registrando Agile...');
+                const url = `${API_URL}?action=guardar&patente=${encodeURIComponent(patente)}&jugador=${encodeURIComponent(jugadorActual)}`;
                 const response = await fetch(url);
                 const data = await response.json();
                 
                 if (data.ok) {
-                    const d = data.datos;
-                    lanzarConfetti(d.bonificacion > 0 ? 'gold' : 'green');
-                    const mensaje = d.bonificacion > 0 
-                        ? `🎉 ¡AGILE CAZADO! +${d.puntos} pts (${d.bonificacion} bonus) 🌟`
-                        : `✅ ¡Agile! +${d.puntos} punto`;
-                    mostrarToast(mensaje);
+                    lanzarConfetti();
+                    mostrarToast(`🎉 ¡AGILE CAZADO! Patente ${patente} registrada 🚗`);
                     
                     cerrarModal();
                     await actualizarUI();
                     
-                    // Forzar verificación inmediata para notificar al otro
                     setTimeout(verificarCambios, 1000);
                 } else {
                     mostrarToast(data.mensaje || '❌ Error al guardar');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                mostrarToast('❌ Error de conexión');
+                mostrarToast('❌ Error de conexión. ¿Tienes internet?');
             }
         }
 
@@ -978,39 +832,36 @@
                 const scoreYesica = document.getElementById('score-yesica');
                 const scoreOscar = document.getElementById('score-oscar');
                 
-                // Animación si cambió el puntaje
                 if (parseInt(scoreYesica.textContent) !== puntajes.yesica) {
-                    scoreYesica.classList.add('changed');
-                    setTimeout(() => scoreYesica.classList.remove('changed'), 500);
+                    scoreYesica.classList.add('pop');
+                    setTimeout(() => scoreYesica.classList.remove('pop'), 500);
                 }
                 if (parseInt(scoreOscar.textContent) !== puntajes.oscar) {
-                    scoreOscar.classList.add('changed');
-                    setTimeout(() => scoreOscar.classList.remove('changed'), 500);
+                    scoreOscar.classList.add('pop');
+                    setTimeout(() => scoreOscar.classList.remove('pop'), 500);
                 }
                 
                 scoreYesica.textContent = puntajes.yesica;
                 scoreOscar.textContent = puntajes.oscar;
                 
-                // Resaltar jugador activo
                 document.getElementById('card-yesica').classList.toggle('active', jugadorActual === 'Yesica');
                 document.getElementById('card-oscar').classList.toggle('active', jugadorActual === 'Oscar');
                 
-                // Obtener últimas patentes
                 const urlPatentes = `${API_URL}?action=consultar`;
                 const responsePatentes = await fetch(urlPatentes);
                 const dataPatentes = await responsePatentes.json();
                 
                 if (dataPatentes.ok) {
-                    const recientes = dataPatentes.datos.slice(0, 15);
-                    const lista = document.getElementById('recent-list');
+                    const recientes = dataPatentes.datos.slice(0, 20);
+                    const lista = document.getElementById('patent-list');
                     lista.innerHTML = recientes.map(p => `
-                        <div class="recent-item">
-                            <span class="patente-badge">${p.patente}</span>
-                            <div class="patente-info">
-                                <div>${p.jugador} · ${p.provincia}</div>
-                                <small>${p.fecha} ${p.hora}</small>
+                        <div class="patent-item">
+                            <span class="patent-plate">${p.patente}</span>
+                            <div class="patent-details">
+                                <div>Cazado por: <strong>${p.jugador}</strong></div>
+                                <small>${p.fecha} a las ${p.hora}</small>
                             </div>
-                            <span class="patente-points ${p.bonificacion > 0 ? 'bonus' : ''}">+${p.puntos}</span>
+                            <span class="patent-points">+1</span>
                         </div>
                     `).join('');
                 }
@@ -1033,13 +884,21 @@
                     const d = data.datos;
                     let mensaje = '';
                     if (d.Yesica > d.Oscar) {
-                        mensaje = `🏆 Yesica ganó la semana pasada (${d.Yesica} vs ${d.Oscar})`;
+                        mensaje = `🏆 ¡Yesica ganó la semana pasada! ${d.Yesica} vs ${d.Oscar} Agiles`;
                     } else if (d.Oscar > d.Yesica) {
-                        mensaje = `🏆 Oscar ganó la semana pasada (${d.Oscar} vs ${d.Yesica})`;
+                        mensaje = `🏆 ¡Oscar ganó la semana pasada! ${d.Oscar} vs ${d.Yesica} Agiles`;
                     } else {
-                        mensaje = `🤝 ¡Empate la semana pasada! (${d.Yesica} pts)`;
+                        mensaje = `🤝 ¡Empate la semana pasada! ${d.Yesica} Agiles cada uno`;
                     }
-                    setTimeout(() => mostrarToast(mensaje), 1000);
+                    
+                    const banner = document.getElementById('winner-banner');
+                    banner.textContent = mensaje;
+                    banner.style.display = 'block';
+                    setTimeout(() => {
+                        banner.style.display = 'none';
+                    }, 8000);
+                    
+                    mostrarToast(mensaje);
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -1048,26 +907,26 @@
 
         async function descargarExcel() {
             try {
-                mostrarToast('⏳ Preparando descarga...');
+                mostrarToast('⏳ Preparando Excel...');
                 const url = `${API_URL}?action=consultar`;
                 const response = await fetch(url);
                 const data = await response.json();
                 
                 if (!data.ok || data.datos.length === 0) {
-                    mostrarToast('📭 No hay patentes para descargar');
+                    mostrarToast('📭 No hay Agiles para descargar');
                     return;
                 }
                 
-                let csv = 'Fecha,Hora,Patente,¿Es Agile?,Provincia,Bonificación,Puntos,Jugador,Semana\n';
+                let csv = 'Fecha,Hora,Patente,Jugador,Semana\n';
                 data.datos.reverse().forEach(p => {
-                    csv += `${p.fecha},${p.hora},${p.patente},${p.esAgile},${p.provincia},${p.bonificacion},${p.puntos},${p.jugador},${p.semana}\n`;
+                    csv += `${p.fecha},${p.hora},${p.patente},${p.jugador},${p.semana}\n`;
                 });
                 
                 const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
                 const urlBlob = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = urlBlob;
-                a.download = `agile_hunter_${new Date().toISOString().split('T')[0]}.csv`;
+                a.download = `agiles_cazados_${new Date().toISOString().split('T')[0]}.csv`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -1079,27 +938,6 @@
         }
 
         // ==================== CÁLCULOS ====================
-        function calcularDistancia(provincia) {
-            const [lat1, lon1] = PROVINCIAS['Catamarca'];
-            const [lat2, lon2] = PROVINCIAS[provincia] || PROVINCIAS['Catamarca'];
-            
-            const R = 6371;
-            const dLat = (lat2 - lat1) * Math.PI / 180;
-            const dLon = (lon2 - lon1) * Math.PI / 180;
-            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                      Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) *
-                      Math.sin(dLon/2) * Math.sin(dLon/2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            return R * c;
-        }
-
-        function calcularBonificacion(distancia) {
-            if (distancia < 300) return 0;
-            if (distancia < 800) return 1;
-            if (distancia < 1500) return 2;
-            return 3;
-        }
-
         function obtenerSemanaISO() {
             const ahora = new Date();
             const inicioAnio = new Date(ahora.getFullYear(), 0, 1);
@@ -1117,42 +955,6 @@
             
             const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
             return `Semana: ${lunes.getDate()} ${meses[lunes.getMonth()]} → ${domingo.getDate()} ${meses[domingo.getMonth()]}`;
-        }
-
-        // ==================== UTILIDADES ====================
-        function llenarSelectProvincias() {
-            const select = document.getElementById('select-provincia');
-            select.innerHTML = '<option value="">-- Seleccionar provincia --</option>';
-            Object.keys(PROVINCIAS).sort().forEach(prov => {
-                select.innerHTML += `<option value="${prov}">${prov}</option>`;
-            });
-        }
-
-        function verificarParametrosURL() {
-            const params = new URLSearchParams(window.location.search);
-            if (!params.get('plate')) return;
-
-            const patente = params.get('plate');
-            const esAgile = params.get('agile') === '1';
-            const provincia = params.get('province');
-
-            if (esAgile && provincia && jugadorActual) {
-                document.getElementById('input-patente').value = patente;
-                patenteTemporal = patente;
-                document.getElementById('select-provincia').value = provincia;
-                document.getElementById('confirmacion-section').style.display = 'block';
-                document.getElementById('provincia-section').style.display = 'block';
-                document.getElementById('btn-buscar-datacar').style.display = 'none';
-                actualizarPreviewDistancia();
-                
-                setTimeout(() => {
-                    if (confirm(`¿Guardar patente ${patente} como Agile de ${provincia}?`)) {
-                        guardarPatente();
-                    }
-                }, 500);
-            }
-
-            window.history.replaceState({}, document.title, window.location.pathname);
         }
 
         // ==================== TOAST ====================
@@ -1173,14 +975,12 @@
         let particulas = [];
         let animacionId = null;
 
-        function lanzarConfetti(tipo) {
+        function lanzarConfetti() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             particulas = [];
             
-            const colores = tipo === 'gold' 
-                ? ['#f0b90b','#ffd700','#e5a600','#f39c12','#ffed4a']
-                : ['#00a859','#2ecc71','#27ae60','#1abc9c','#58d68d'];
+            const colores = ['#00a859','#2ecc71','#27ae60','#1abc9c','#f0b90b','#ffd700','#e5a600'];
             
             for (let i = 0; i < 150; i++) {
                 particulas.push({
@@ -1191,8 +991,7 @@
                     color: colores[Math.floor(Math.random() * colores.length)],
                     size: Math.random() * 10 + 4,
                     rotacion: Math.random() * 360,
-                    rotVel: (Math.random() - 0.5) * 15,
-                    forma: Math.random() > 0.5 ? 'rect' : 'circle'
+                    rotVel: (Math.random() - 0.5) * 15
                 });
             }
 
@@ -1215,15 +1014,7 @@
                 ctx.rotate(p.rotacion * Math.PI / 180);
                 ctx.fillStyle = p.color;
                 ctx.globalAlpha = 0.9;
-                
-                if (p.forma === 'circle') {
-                    ctx.beginPath();
-                    ctx.arc(0, 0, p.size/2, 0, Math.PI*2);
-                    ctx.fill();
-                } else {
-                    ctx.fillRect(-p.size/2, -p.size/4, p.size, p.size/2);
-                }
-                
+                ctx.fillRect(-p.size/2, -p.size/4, p.size, p.size/2);
                 ctx.restore();
                 
                 if (p.y < canvas.height + 50) {
@@ -1239,7 +1030,9 @@
         // ==================== SERVICE WORKER ====================
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('service-worker.js').catch(() => {});
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(() => console.log('Service Worker registrado'))
+                    .catch(() => console.log('Service Worker falló'));
             });
         }
     </script>
